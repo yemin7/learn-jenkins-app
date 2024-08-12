@@ -21,15 +21,17 @@ pipeline {
         }
 
         stage('Test') {
-            sh '''
-                if test -f build/index.html; then
-                    echo "index.html file exists."
-                else
-                    exit 1
-                fi
+            steps {
+                sh '''
+                    if test -f build/index.html; then
+                        echo "index.html file exists."
+                    else
+                        exit 1
+                    fi
 
-                npm test
-            '''
+                    npm test
+                '''
+            }
         }
     }
 }
