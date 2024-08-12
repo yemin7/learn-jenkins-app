@@ -1,14 +1,13 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image "node:18-alpine"
+            reuseNode true
+        }
+    }
 
     stages {
         stage('Build') {
-            agent {
-                docker {
-                    image "node:18-alpine"
-                    reuseNode true
-                }
-            }
             steps {
                 sh '''
                     ls -la
@@ -19,6 +18,18 @@ pipeline {
                     ls -la
                 '''
             }
+        }
+
+        stage('Test') {
+            sh '''
+                if test -f build/index.html; then
+                    echo "index.html file exists."
+                else
+                    exit 1
+                fi
+
+                npm test
+            '''
         }
     }
 }
